@@ -1,51 +1,68 @@
-# Traffic Light Controller using Verilog
+# 🚦 Traffic Light Controller using Verilog
 
-This project implements a simple **traffic light controller** using Verilog HDL. It is designed as a **Finite State Machine (FSM)** to control signal lights for a T-intersection with defined time delays for each state.
+This project implements a **Traffic Light Controller** using a **Finite State Machine (FSM)** in **Verilog HDL**. The system manages traffic lights for:
+- Two main roads (M1 and M2)
+- A main-turn (MT) road
+- A side (S) road
 
-## 🚦 Features
-
-- Controls Red, Yellow, and Green lights for both main and side roads.
-- Implements FSM-based logic with defined state transitions.
-- Configurable timing for each signal state (e.g., Green: 10s, Yellow: 3s).
-- Testbench provided for simulation and verification.
-- Includes design diagrams and state tables.
-
-## 📁 Files Included
-
-- `RTL Code.txt`: Verilog source code for the FSM
-- `Testbench.txt`: Verilog testbench for simulation
-- `State_Diagram.png`: Visual state diagram of the controller
-- `State_Table.png`: State transition table
-- `Logic_Diagram.png`: Logic circuit design
-- `RTL_Schematic_View.png`: RTL schematic from synthesis
-- `Directions.png`: Intersection layout
-
-## 🛠 Tools Used
-
-- **Xilinx ISE** / **Vivado** for simulation and synthesis
-- **ModelSim** (optional) for behavioral simulation
-- Any compatible FPGA board (e.g., Spartan-3/6) for implementation
-
-## 🔧 How It Works
-
-The controller cycles through four primary states:
-1. Main Road Green
-2. Main Road Yellow
-3. Side Road Green
-4. Side Road Yellow
-
-Each state lasts for a specific duration (configured using counters), and transitions are controlled by a synchronous FSM.
-
-## 📌 To Do
-
-- Add pedestrian crossing support
-- Add vehicle sensor input for adaptive timing
-- Extend for a 4-way intersection
-
-## 👨‍💻 Author
-
-- **Virupakshayya Hiremath**
+The FSM transitions through **6 distinct states** with specified timing to ensure smooth and coordinated traffic movement.
 
 ---
 
-Feel free to clone, modify, and improve. Contributions are welcome!
+## 📁 Repository Contents
+
+| File/Folder        | Description |
+|--------------------|-------------|
+| `RTL Code.txt`     | Verilog RTL code for the traffic light controller |
+| `Testbench.txt`    | Verilog testbench to simulate the design |
+| `Logic_Diagram.png`| Block/logic diagram of the controller |
+| `State_Diagram.png`| FSM state diagram |
+| `State_Table.png`  | State transition table |
+| `RTL_Schematic_View.png` | Synthesized RTL schematic (from simulation tool) |
+| `traffic_light_waveform.png` | Waveform output from simulation |
+| `README.md`        | Project documentation |
+
+---
+
+## ⚙️ FSM Design Overview
+
+The controller cycles through **6 states (S1 to S6)** with defined durations:
+
+| State | M1 | M2 | MT | S | Duration |
+|-------|----|----|----|---|----------|
+| S1    | G  | G  | R  | R | 7 units  |
+| S2    | G  | Y  | R  | R | 2 units  |
+| S3    | G  | R  | G  | R | 5 units  |
+| S4    | Y  | R  | Y  | R | 2 units  |
+| S5    | R  | R  | R  | G | 3 units  |
+| S6    | R  | R  | R  | Y | 2 units  |
+
+*(G: Green, Y: Yellow, R: Red)*  
+*(Each light is encoded as 3-bit: 001=Green, 010=Yellow, 100=Red)*
+
+---
+
+## 🔍 Simulation Output
+
+The design was simulated using **EDA Playground** with **Icarus Verilog**. The testbench applies clock and reset, and logs signal activity over time.
+
+### ✅ EPWave Output Screenshot:
+
+![Traffic Light FSM Waveform](traffic_light_waveform.png)
+
+---
+
+## ▶️ How to Run the Design
+
+### 🧪 1. Run on [EDA Playground](https://edaplayground.com)
+
+- Use `SystemVerilog/Verilog` as the language.
+- Paste RTL code in `design.sv` and testbench in `testbench.sv`.
+- Select **Icarus Verilog** as simulator.
+- Add this in your testbench to enable waveform:
+
+```verilog
+initial begin
+  $dumpfile("dump.vcd");
+  $dumpvars(0, testbench);
+end
